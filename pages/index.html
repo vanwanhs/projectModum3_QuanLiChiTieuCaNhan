@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="../css/index.css">
+</head>
+
+<body>
+    <div class="header">
+        <div class="account">
+            <span class="text_head">📒 Personal Finance K24 - Rikkei</span>
+            <div class="account-controls">
+                <select id="account" style="background-color: #4338CA">
+                    <option value="user">👤 Tài khoản: <span id="currentUser"></span></option>
+                    <option value="logout">🚪 Đăng Xuất</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+            <div class="header">
+                <p>🎯 Smart Expense Tracking</p>
+                <span>Track your budget and monthly expenses easily</span>
+            </div>
+            <div class="main">
+                <div>
+                    <p class="top" style="font-size: 30px; color: #4F46E5;">📊 Personal Finance Management</p>
+                </div>
+                <div class="date">
+                    <span>📅 Select Month</span>
+                    <input class="date-input" type="month" style="width: 178px; height: 42px;  border-radius: 6px; border: 1px solid #DEE2E6;">
+                    <span id="monthError" style="display: none; color: red;"></span>
+                </div>
+                <div class="budget">
+                    <span>💰 Monthly Budget</span>
+                    <input type="text" 
+                           id="budgetInput"
+                           placeholder="VND" 
+                           class="budget-input">
+                    <button id="btnSaveBudget" style="color: #DEE2E6; width: 50px; height: 42px;  border-radius: 6px; border: 1px solid #DEE2E6; background-color: #4338CA;">Save</button> <!-- Thêm ID -->
+                    <span id="budgetError" style="display: none; color: red; "></span> <!-- Thêm ID -->
+                </div>
+                <div class="reOkane">
+                    <span>Remaining Amount</span>
+                    <p>0 VND</p>
+                </div>
+                <div class="manager">
+                    <p class="top">💼 Category Management (Monthly)</p> <br>
+                    <input type="text" id="categoryName" placeholder="Category Name">
+                    <input type="number" id="categoryLimit" placeholder="Limit (VND)">
+                    <button id="btnAddCategory">Add Category</button>
+                    <span id="categoryError" style="display: none; color: red;"></span>
+                    
+                    <table style="width: 100%; margin-top: 20px;">
+                        <thead>
+                            <tr>
+                                <th>Tên danh mục</th>
+                                <th>Giới hạn</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="categoryBody"></tbody>
+                    </table>
+                </div>
+                
+                <!-- Thêm form edit -->
+                <div id="editForm" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+                    <input type="hidden" id="editCategoryId">
+                    <input type="text" id="editCategoryName" placeholder="Tên danh mục">
+                    <input type="number" id="editCategoryLimit" placeholder="Giới hạn">
+                    <button id="btnSaveEdit">Lưu</button>
+                    <button onclick="cancelEdit()">Hủy</button>
+                    <span id="editCategoryError" style="color: red;"></span>
+                </div>
+                <div class="transaction-form">
+                    <h3>Thêm giao dịch mới</h3>
+                    <div class="form-group">
+                        <input type="text" id="expenseAmount" placeholder="Số tiền (VND)">
+                        <select id="selectedCategory">
+                            <option value="">Chọn danh mục</option>
+                        </select>
+                        <input type="text" id="expenseNote" placeholder="Ghi chú">
+                        <button onclick="addExpense()">Thêm</button>
+                        
+                        <!-- Hiển thị thông báo -->
+                        <div class="notifications">
+                            <div id="expenseError" class="alert error"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transaction History -->
+                <div class="transaction-history">
+                    <span class="top">🧾 Lịch sử giao dịch</span> <br> <br>
+                    <div class="main">
+                        <input type="text" class="search" id="" placeholder="tìm nội dung">
+                        <button class="button1"><img src="../assets/images/Button.svg" alt=""></button>
+                        <button class="button2">Sắp xếp theo giá</button>
+                
+                    </div>
+                    <div class="transaction-item">
+                        <table>
+                            <td>
+
+                            </td>
+                        </table>
+                    </div>
+                    <div class="pagination">
+                        <button onclick="prevPage()">Previous</button>
+                        <span id="pageNumbers"></span>
+                        <button onclick="nextPage()" class="nextPage">Next</button>
+                    </div>
+
+                    <!-- More transaction items... -->
+                    <div class="notifications">
+                        <div id="expenseError" class="alert error"></div>
+                        <div id="categoryWarning" class="alert warning"></div>
+                    </div>
+                </div>
+                <!-- Monthly Statistics Table -->
+                <div class="monthly-stats">
+                    <h3>Thống kê chi tiêu các tháng</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tháng</th>
+                                <th>Chi tiêu</th>
+                                <th>Ngân sách</th>
+                                <th>Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="footer">
+                <p>© 2025 Quản Lý Tài Chính Cá Nhân, by Quốc Hai</p>
+            </div>
+    </div>
+    <script src="../js/index.js"></script>
+</body>
+
+</html>

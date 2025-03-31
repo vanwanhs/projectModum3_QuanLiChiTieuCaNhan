@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="../css/login.css">
+</head>
+<body>
+    <div class="container" id="formLogin">
+        <form action="#">
+            <h1>🔐 Login</h1>
+            <input type="text" id="email" placeholder="Enter your email"> <br>
+            <div id="emailError" class="error-message"></div>
+            <input type="password" class="password" id="password" placeholder="Enter your password">
+            <div id="passwordError" class="error-message"></div>
+            <a href="#" class="Forgot" target="_blank">Forgot password?</a> <br>
+            <!-- Thay input submit bằng button -->
+            <button type="submit" class="submit">Login</button> <br>
+            <p class="passwordError"></p>
+            <label for="">Don't have an account?</label> <a href="register.html">Signup</a> <br>
+            <span class="line left"></span><span class="center">Or</span> <span class="line right"></span> <br>
+            <a href="#" class="btn fb">Login with Facebook</a> <br>
+            <a href="#" class="btn gg">Login with Google</a>
+        </form>
+    </div>
+    <script src="../js/login.js"></script>
+</body>
+</html>

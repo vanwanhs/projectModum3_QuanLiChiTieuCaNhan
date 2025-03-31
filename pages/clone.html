@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Tài Chính Cá Nhân</title>
+    <style>
+        /* CSS chung */
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f7fa;
+        }
+
+        h1, h2 {
+            color: #2c3e50;
+        }
+
+        hr {
+            border: 1px solid #e0e0e0;
+            margin: 2rem 0;
+        }
+
+        /* Bảng danh mục */
+        .category-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .category-table th,
+        .category-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        .category-table th {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: 600;
+        }
+
+        .category-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Nút hành động */
+        .action-buttons button {
+            background: none;
+            border: none;
+            color: #4CAF50;
+            cursor: pointer;
+            padding: 5px 10px;
+            margin: 0 3px;
+            transition: opacity 0.2s;
+        }
+
+        .action-buttons button:hover {
+            opacity: 0.8;
+        }
+
+        /* Form thêm giao dịch */
+        .transaction-form {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .transaction-form input,
+        .transaction-form select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        /* Lịch sử giao dịch */
+        .transaction-history {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .transaction-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        /* Cảnh báo vượt hạn mức */
+        .budget-alert {
+            background: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+            border: 1px solid #ffeeba;
+        }
+
+        /* Bảng thống kê */
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            margin-top: 20px;
+        }
+
+        .stats-table th,
+        .stats-table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #dee2e6;
+        }
+
+        .stats-table th {
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <h1>Quản Lý Tài Chính Cá Nhân</h1>
+    
+    <!-- Phần quản lý danh mục -->
+    <h2>Quản lý danh mục (theo tháng)</h2>
+    <table class="category-table">
+        <thead>
+            <tr>
+                <th>Tên danh mục</th>
+                <th>Giới hạn (VND)</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Tiền phòng - Giới hạn: 2,000,000 VND</td>
+                <td></td>
+                <td class="action-buttons">
+                    <button>Sửa</button>
+                    <button>Xóa</button>
+                </td>
+            </tr>
+            <!-- Thêm các hàng khác tương tự -->
+        </tbody>
+    </table>
+
+    <!-- Form thêm giao dịch -->
+    <div class="transaction-form">
+        <input type="number" placeholder="Số tiền">
+        <select>
+            <option>Tiền chi tiêu</option>
+            <option>Tiền thu nhập</option>
+        </select>
+        <input type="text" placeholder="Ghi chú">
+        <button>Thêm</button>
+    </div>
+
+    <!-- Lịch sử giao dịch -->
+    <h2>Lịch sử giao dịch</h2>
+    <div class="transaction-history">
+        <div class="transaction-item">
+            <span>Điện phòng: Đóng tiền phòng tháng 3 - 2,000,000 VND</span>
+        </div>
+        <!-- Thêm các mục khác -->
+    </div>
+
+    <!-- Cảnh báo vượt hạn mức -->
+    <div class="budget-alert">
+        Danh mục "tiền ăn" đã vượt giới hạn: 1,000,000 / 1,000,000 VND
+    </div>
+
+    <!-- Bảng thống kê -->
+    <table class="stats-table">
+        <thead>
+            <tr>
+                <th>Tháng</th>
+                <th>Chi tiêu</th>
+                <th>Ngân sách</th>
+                <th>Trạng thái</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>2025-03</td>
+                <td>2,150,000 VND</td>
+                <td>5,000,000</td>
+                <td>✔ Đạt</td>
+            </tr>
+            <!-- Thêm hàng khác -->
+        </tbody>
+    </table>
+</body>
+</html>
