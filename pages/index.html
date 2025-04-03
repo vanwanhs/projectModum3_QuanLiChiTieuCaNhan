@@ -21,10 +21,11 @@
         </div>
     </div>
     <div class="container">
-            <div class="header">
-                <p>🎯 Smart Expense Tracking</p>
-                <span>Track your budget and monthly expenses easily</span>
-            </div>
+            
+                <div class="header">
+                    <p>🎯 Smart Expense Tracking</p>
+                    <span>Track your budget and monthly expenses easily</span>
+                </div>
             <div class="main">
                 <div>
                     <p class="top" style="font-size: 30px; color: #4F46E5;">📊 Personal Finance Management</p>
@@ -40,12 +41,12 @@
                            id="budgetInput"
                            placeholder="VND" 
                            class="budget-input">
-                    <button id="btnSaveBudget" style="color: #DEE2E6; width: 50px; height: 42px;  border-radius: 6px; border: 1px solid #DEE2E6; background-color: #4338CA;">Save</button> <!-- Thêm ID -->
+                    <button id="btnSaveBudget" style="color: #DEE2E6; width: 75.5px; height: 42px;  border-radius: 8px; border: none #DEE2E6; background-color:#3B82F6;">Save</button> <!-- Thêm ID -->
                     <span id="budgetError" style="display: none; color: red; "></span> <!-- Thêm ID -->
                 </div>
                 <div class="reOkane">
                     <span>Remaining Amount</span>
-                    <p>0 VND</p>
+                    <p style="color: rgb(24, 158, 24); font-size: 24px;">0 VND</p>
                 </div>
                 <div class="manager">
                     <p class="top">💼 Category Management (Monthly)</p> <br>
@@ -59,10 +60,11 @@
                             <tr>
                                 <th>Tên danh mục</th>
                                 <th>Giới hạn</th>
-                                <th>Thao tác</th>
                             </tr>
                         </thead>
-                        <tbody id="categoryBody"></tbody>
+                        <tbody id="categoryBody">
+
+                        </tbody>
                     </table>
                 </div>
                 
@@ -96,7 +98,7 @@
                 <div class="transaction-history">
                     <span class="top">🧾 Lịch sử giao dịch</span> <br> <br>
                     <div class="main">
-                        <input type="text" class="sea   rch" id="" placeholder="tìm nội dung">
+                        <input type="text" class="search" id="" placeholder="tìm nội dung">
                         <button class="button1"><img src="../assets/images/Button.svg" alt=""></button>
                         <button class="button2">Sắp xếp theo giá</button>
                 
@@ -109,9 +111,9 @@
                         </table>
                     </div>
                     <div class="pagination">
-                        <button onclick="prevPage()">Previous</button>
+                        <button style="width: 90px; height: 38px;" onclick="prevPage()">Previous</button>
                         <span id="pageNumbers"></span>
-                        <button onclick="nextPage()" class="nextPage">Next</button>
+                        <button style="width: 90px; height: 38px;" onclick="nextPage()" class="nextPage">Next</button>
                     </div>
 
                     <!-- More transaction items... -->

@@ -76,7 +76,13 @@ select {
     border-radius: 12px;
     padding: 25px;
 }
-
+.header-container {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    background-color: #f0f0f0;
+    padding: 10px;
+}
 .container div{
     margin-top: 24px;
 }
@@ -108,8 +114,19 @@ select {
     box-shadow: 2px 2px 4px 0px #0000001A;
     background-color: #FFFFFF;
 }
+
+
+
+
+.container .manager .btnAddCategory{
+
+}
+
+
+
+/* chỉnh cho cái nút btnAddCategory */
 .container .manager{
-    padding: 10px ;
+    padding: 2px ;
     height: auto;
     border: 1px solid #ddd;
     border-radius: 12px;
@@ -120,16 +137,20 @@ select {
     padding-right: 400px;
 }
 .container .manager input{
-    width: 250px;
+    width: 270px;
     height: 42px;
     border-radius: 6px;
     border-width: 1px;
-    margin-right: 30px;
+    margin-right: 5px;
 }
 .container .manager button{
-    width: 163.16000366210938;
+    width: 180.16000366210938;
 height: 44px;
 border-radius: 6px;
+background-color: #22C55E;
+border: none;
+color: #fff;
+
 
 }
 .container .manager input::placeholder {
@@ -152,7 +173,7 @@ border-radius: 6px;
 .container .transaction-form span {
     display: inline-block;
     width: 150px;
-    height: 30px;
+    height: 40px;
     border: 1px solid #ccc;
     border-radius: 12px;
     background-color: #f5f5f5;
@@ -166,7 +187,7 @@ border-radius: 6px;
 }
 .container .transaction-form input{
     width: 130px;
-    height: 30px;
+    height: 40px;
     border: 1px solid #ddd;
     border-radius: 12px;
     box-shadow: 2px 2px 4px 0px #0000001A;
@@ -175,20 +196,21 @@ border-radius: 6px;
 } 
 .container .transaction-form button{
     width: 100px;
-    height: 30px;
+    height: 40px;
     border: 1px solid #ccc;
     border-radius: 12px;
-    background-color: #6366F1;
+    background-color: #4338CA;
     padding: 5px 5px;
     line-height: 20px;
     margin: 15px 15px;
+    color: #ddd;
 }
 .container .transaction-form select{
     width: 150px;
-    height: 30px;
+    height: 40px;
     border: 1px solid #ccc;
     border-radius: 12px;
-    background-color: #6366F1;
+    background-color: #ccc;
     padding: 5px 5px;
     line-height: 20px;
     margin: 15px 15px;
@@ -201,63 +223,42 @@ border-radius: 6px;
 
 
 /* Lịch sử giao dịch */
- .container .transaction-history{
-    padding: 10px ;
-    height: auto;
-    border: 1px solid #ddd;
-    border-radius: 12px;
-    box-shadow: 2px 2px 4px 0px #0000001A;
-    background-color: #FFFFFF;
- }
- .container .transaction-history .top{
-    padding-right: 500px;
-}
-.container .transaction-history input::placeholder {
-    position: relative;
-    left: 30px; 
-    letter-spacing: 0.5px; 
-}
-.container .transaction-history .search{
-    width: 170px;
-    height: 42px;
-    background-image: url(../assets/images/SVG.svg);
-    background-repeat: no-repeat;
-    background-size: 20px;
-    background-position: 3px;
+.container .transaction-history {
+    padding: 10px;
     border: 1px solid #ddd;
     border-radius: 12px;
     box-shadow: 2px 2px 4px 0px #0000001A;
     background-color: #FFFFFF;
 }
-/* .container .transaction-history .button2{
-    border: 1px solid #ddd;
-    border-radius: 12px;
-    width: 170px;
-    height: 42px;
-} 
-.container .transaction-history .button1{
-    display: inline-block;
-    border: 1px solid #ddd;
-    border-radius: 12px;
-    margin: 10px;
-    width: 170px;
-    height: 42px;
-}  */
-.transaction-history .main {
-    display: flex;
-    gap: 10px;
+
+.container .transaction-history .top {
+    font-size: 20px;
+    font-weight: bold;
     margin-bottom: 20px;
 }
 
-/* Input tìm kiếm */
+.transaction-history .main {
+    display: flex;
+    gap: 15px; 
+    justify-content: center; 
+    align-items: center;
+    margin-bottom: 20px;
+}
+
 .transaction-history .search {
-    flex: 1;
-    padding: 10px 15px;
+    width: 180px;
+    height: 42px;
+    padding: 0 15px 0 30px;
     border: 1px solid #ddd;
     border-radius: 8px;
     font-size: 14px;
+    background-image: url(../assets/images/SVG.svg);
+    background-repeat: no-repeat;
+    background-size: 20px;
+    background-position: 10px;
     transition: all 0.3s ease;
 }
+
 
 .transaction-history .search:focus {
     outline: none;
@@ -265,16 +266,16 @@ border-radius: 6px;
     box-shadow: 0 0 0 2px rgba(67, 56, 202, 0.1);
 }
 
-/* Nút 1 (Button có icon) */
+/* Button 1 */
 .transaction-history .button1 {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
     width: 42px;
     height: 42px;
     border: 1px solid #ddd;
-    border-radius: 8px;
     background-color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
 }
@@ -284,14 +285,19 @@ border-radius: 6px;
     border-color: #4338CA;
 }
 
-/* Nút 2 (Sắp xếp) */
+.transaction-history .button1 img {
+    width: 42px;
+    height: 42px;
+}
+
+/* Button 2 */
 .transaction-history .button2 {
     padding: 10px 20px;
     border: 1px solid #4338CA;
-    border-radius: 8px;
     background-color: #4338CA;
     color: white;
     font-weight: 500;
+    border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
 }
@@ -301,11 +307,31 @@ border-radius: 6px;
     transform: translateY(-1px);
 }
 
-.transaction-history button:hover{
+/* Hover effect for buttons */
+.transaction-history button:hover {
     background-color: #E9ECEF;
 }
-.transaction-history .nextPage{
-    color:#3730A3;
+
+.transaction-history .transaction-item table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.transaction-history .transaction-item td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+/* Chuyển trang */
+.transaction-history .nextPage {
+    color: #3730A3;
+    cursor: pointer;
+    margin-top: 20px;
+}
+.transaction-history button{
+    cursor: pointer;
+   border: none;
+   border-radius: 4px;
 }
 
 /* Header styles */
@@ -366,3 +392,54 @@ border-radius: 6px;
     border: 1px solid #ffd43b;
     color: #674d00;
 }
+
+/* Bổ sung thêm một số cái linh tinh */
+
+/* Table của bảng thống kê lịch sử*/
+/* Table of monthly statistics */
+.monthly-stats table {
+    font-family: Arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.monthly-stats th,
+.monthly-stats td {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+.monthly-stats th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+}
+
+.monthly-stats td {
+    border: 1px solid #ddd; 
+}
+
+@media screen and (max-width: 768px) {
+    .header {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px; /* Adjust padding for smaller screens */
+    }
+
+    .container {
+        max-width: 100%;
+        margin: 10px;
+    }
+
+    .container .transaction-form input, 
+    .container .manager input {
+        width: 100%; /* Make inputs full-width on small screens */
+        margin-bottom: 10px;
+    }
+
+    .transaction-history .main {
+        flex-direction: column; /* Stack items vertically */
+        gap: 10px;
+    }
+}
+

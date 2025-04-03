@@ -86,19 +86,38 @@ btnSaveBudget.addEventListener("click", function() {
 });
 
 /* ========== PHẦN 4: QUẢN LÝ DANH MỤC ========== */
+// function renderCategories() {
+//     const tbody = document.getElementById('categoryBody');
+//     tbody.innerHTML = categories.map(category => `
+//         <tr>
+//             <td>${category.name}</td>
+//             <td>${category.limit.toLocaleString()} VND</td>
+//             <td>
+//                 <button onclick="openEdit(${category.id})">Sửa</button>
+//                 <button onclick="deleteCategory(${category.id})">Xóa</button>
+                
+//             </td>
+//         <hr>
+//         </tr>
+        
+//     `).join('');
+// }
 function renderCategories() {
-    const tbody = document.getElementById('categoryBody');
+    const tbody = document.getElementById("categoryBody");
     tbody.innerHTML = categories.map(category => `
         <tr>
             <td>${category.name}</td>
             <td>${category.limit.toLocaleString()} VND</td>
             <td>
-                <button onclick="openEdit(${category.id})">Sửa</button>
-                <button onclick="deleteCategory(${category.id})">Xóa</button>
+                <button onclick="openEdit(${category.id})" style="border:none; color:red; background-color:#FFFFFF">Sửa</button>
+                <button onclick="deleteCategory(${category.id})"style="border:none; color:red;background-color:#FFFFFF;">Xóa</button>
             </td>
         </tr>
+        <tr><td colspan="3"><hr></td></tr> 
     `).join('');
 }
+
+
 
 function renderCategoryOptions() {
     const select = document.getElementById('selectedCategory');
