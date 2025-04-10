@@ -14,8 +14,8 @@
             <span class="text_head">📒 Personal Finance K24 - Rikkei</span>
             <div class="account-controls">
                 <select id="account" style="background-color: #4338CA">
-                    <option value="user">👤 Tài khoản: <span id="currentUser"></span></option>
-                    <option value="logout">🚪 Đăng Xuất</option>
+                    <option value="user">👤 Account: <span id="currentUser"></span></option>
+                    <option value="logout">🚪 logout</option>
                 </select>
             </div>
         </div>
@@ -51,15 +51,15 @@
                 <div class="manager">
                     <p class="top">💼 Category Management (Monthly)</p> <br>
                     <input type="text" id="categoryName" placeholder="Category Name">
-                    <input type="number" id="categoryLimit" placeholder="Limit (VND)">
+                    <input type="number" id="categoryLimit" min="0" placeholder="Limit (VND)">
                     <button id="btnAddCategory">Add Category</button>
                     <span id="categoryError" style="display: none; color: red;"></span>
                     
                     <table style="width: 100%; margin-top: 20px;">
                         <thead>
                             <tr>
-                                <th>Tên danh mục</th>
-                                <th>Giới hạn</th>
+                                <th>Category</th>
+                                <th>Budget</th>
                             </tr>
                         </thead>
                         <tbody id="categoryBody">
@@ -67,25 +67,36 @@
                         </tbody>
                     </table>
                 </div>
-                
-                <!-- Thêm form edit -->
-                <div id="editForm" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-                    <input type="hidden" id="editCategoryId">
-                    <input type="text" id="editCategoryName" placeholder="Tên danh mục">
-                    <input type="number" id="editCategoryLimit" placeholder="Giới hạn">
-                    <button id="btnSaveEdit">Lưu</button>
-                    <button onclick="cancelEdit()">Hủy</button>
-                    <span id="editCategoryError" style="color: red;"></span>
+                <!-- Form thêm chỉnh sửa và xóa của thư mục -->
+                <div id="editForm" style="display:none; margin-top: 20px;">
+                    <div class="edit-form-container">
+                        <h3>✏️ Chỉnh sửa danh mục</h3>
+                        <input type="hidden" id="editCategoryId">
+                        <div class="form-group">
+                            <label for="editCategoryName">Tên danh mục:</label>
+                            <input type="text" id="editCategoryName" placeholder="Nhập tên danh mục">
+                        </div>
+                        <div class="form-group">
+                            <label for="editCategoryLimit">Hạn mức (VND):</label>
+                            <input type="number" id="editCategoryLimit" placeholder="Ví dụ: 1000000">
+                        </div>
+                        <div id="editCategoryError" class="error-message"></div>
+                        <div class="edit-form-buttons">
+                            <button id="btnSaveEdit" class="btn save">💾 Lưu</button>
+                            <button onclick="cancelEdit()" class="btn cancel">X Hủy</button>
+                        </div>
+                    </div>
                 </div>
+                
                 <div class="transaction-form">
-                    <h3>Thêm giao dịch mới</h3>
+                    <h3>Add transaction</h3>
                     <div class="form-group">
-                        <input type="text" id="expenseAmount" placeholder="Số tiền (VND)">
+                        <input type="text" id="expenseAmount" placeholder="Amount of money (VND)">
                         <select id="selectedCategory">
-                            <option value="">Chọn danh mục</option>
+                            <option value="">Select category</option>
                         </select>
-                        <input type="text" id="expenseNote" placeholder="Ghi chú">
-                        <button onclick="addExpense()">Thêm</button>
+                        <input type="text" id="expenseNote" placeholder="Note">
+                        <button onclick="addExpense()">Add</button>
                         
                         <!-- Hiển thị thông báo -->
                         <div class="notifications">
@@ -94,14 +105,16 @@
                     </div>
                 </div>
 
-                <!-- Transaction History -->
+                <!-- Lịch sử giao dịch -->
                 <div class="transaction-history">
-                    <span class="top">🧾 Lịch sử giao dịch</span> <br> <br>
+                    <span class="top">🧾 Transaction history</span> <br> <br>
                     <div class="main">
-                        <input type="text" class="search" id="" placeholder="tìm nội dung">
+                        <input type="text" class="search" id="" placeholder="Search">
                         <button class="button1"><img src="../assets/images/Button.svg" alt=""></button>
-                        <button class="button2">Sắp xếp theo giá</button>
-                
+                        <select id="sortOrderSelect" class="button2">
+                            <option value="asc">Sort Increase</option>
+                            <option value="desc">Sort Decrease</option>
+                          </select>     
                     </div>
                     <div class="transaction-item">
                         <table>
@@ -116,22 +129,22 @@
                         <button style="width: 90px; height: 38px;" onclick="nextPage()" class="nextPage">Next</button>
                     </div>
 
-                    <!-- More transaction items... -->
+                    <!-- Cảnh báo giao dịch... -->
                     <div class="notifications">
                         <div id="expenseError" class="alert error"></div>
                         <div id="categoryWarning" class="alert warning"></div>
                     </div>
                 </div>
-                <!-- Monthly Statistics Table -->
+                <!-- Bảng danh sách dữ liệu các tháng -->
                 <div class="monthly-stats">
-                    <h3>Thống kê chi tiêu các tháng</h3>
+                    <h3>Monthly expenditure statistics</h3> <br>
                     <table>
                         <thead>
                             <tr>
-                                <th>Tháng</th>
-                                <th>Chi tiêu</th>
-                                <th>Ngân sách</th>
-                                <th>Trạng thái</th>
+                                <th>Month</th>
+                                <th> Monthly expenditure</th>
+                                <th>Budget</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -142,7 +155,7 @@
 
             <!-- Footer -->
             <div class="footer">
-                <p>© 2025 Quản Lý Tài Chính Cá Nhân, by Quốc Hai</p>
+                <p>© 2025 Personal Finance Management by Quốc Hải</p>
             </div>
     </div>
     <script src="../js/index.js"></script>

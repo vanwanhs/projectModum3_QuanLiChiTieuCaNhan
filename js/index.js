@@ -45,7 +45,6 @@ const budgetError = document.getElementById("budgetError");
 document.querySelector('.date-input').addEventListener('change', function(e) {
     selectedMonth = e.target.value;
     let existingData = monthlyData.find(item => item.month === selectedMonth);
-
     if (!existingData) {
         existingData = {
             id: Date.now(),
@@ -63,6 +62,7 @@ document.querySelector('.date-input').addEventListener('change', function(e) {
 });
 
 btnSaveBudget.addEventListener("click", function() {
+    
     const monthError = document.getElementById("monthError");
     budgetError.style.display = "none";
     monthError.style.display = "none";
@@ -121,12 +121,17 @@ document.getElementById('btnAddCategory').addEventListener('click', () => {
     const limit = parseFloat(document.getElementById('categoryLimit').value);
     const errorElement = document.getElementById('categoryError');
 
+    // [name,limit].forEach(error => error.style.display = "none");
     if (!name || !limit) {
         errorElement.textContent = "Vui lòng nhập đầy đủ thông tin";
         errorElement.style.display = 'block';
         return;
-    }
+    } 
 
+    if (name && limit){
+        errorElement.textContent = "";
+        errorElement.style.display = 'none';
+    }
     const existingCategory = categories.find(c => c.name.toLowerCase() === name.toLowerCase());
     if (existingCategory) {
         errorElement.textContent = "Tên danh mục đã tồn tại";
@@ -142,6 +147,7 @@ document.getElementById('btnAddCategory').addEventListener('click', () => {
     document.getElementById('categoryLimit').value = '';
 });
 
+/// Mở form chỉnh sửa cùa thư mục
 function openEdit(id) {
     const category = categories.find(c => c.id === id);
     document.getElementById('editCategoryId').value = id;
@@ -151,12 +157,17 @@ function openEdit(id) {
 }
 
 function deleteCategory(id) {
+    const category = categories.find(c => c.id === id);
+    const confirmDelete = confirm(`Bạn có chắc muốn xóa danh mục "${category.name}" không?`);
+    if (!confirmDelete) return;
     categories = categories.filter(c => c.id !== id);
     saveData();
     renderCategories();
     renderCategoryOptions();
 }
 
+
+// Sửa dữ liệu thư mục trong bài
 document.getElementById('btnSaveEdit').addEventListener('click', () => {
     const id = parseInt(document.getElementById('editCategoryId').value);
     const name = document.getElementById('editCategoryName').value.trim();
@@ -165,6 +176,10 @@ document.getElementById('btnSaveEdit').addEventListener('click', () => {
 
     errorElement.textContent = '';
 
+    if(limit<0){
+        errorElement.textContent = "Vui lòng nhập dữ liệu chính xác";
+        return;
+    }
     if (!name || !limit) {
         errorElement.textContent = "Vui lòng nhập đầy đủ thông tin";
         return;
@@ -185,7 +200,7 @@ document.getElementById('btnSaveEdit').addEventListener('click', () => {
     renderCategoryOptions();
     cancelEdit();
 });
-
+// Chức năng đóng danh mục trong bài
 function cancelEdit() {
     document.getElementById('editForm').style.display = 'none';
     document.getElementById('editCategoryError').textContent = '';
@@ -227,7 +242,6 @@ function addExpense() {
     if (amount > monthData.remaining) {
         errorElement.textContent = `Vượt quá ngân sách còn lại (${monthData.remaining.toLocaleString()} VND)!`;
         errorElement.style.display = "block";
-        return;
     }
 
     const categorySpent = monthData.expenses
@@ -296,7 +310,7 @@ function updateTransactionUI() {
         );
     }
 
-    expenses.sort((a, b) => sortOrder === 'asc' ? a.amount - b.amount : b.amount - a.amount);
+     expenses.sort((a, b) => sortOrder === 'asc' ? a.amount - b.amount : b.amount - a.amount);
 
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
@@ -309,7 +323,7 @@ function updateTransactionUI() {
             <th>Số tiền</th>
             <th>Ghi chú</th>
             <th></th>
-        </tr>
+        </tr> 
     `;
 
     for (const expense of pagedExpenses) {
@@ -351,10 +365,12 @@ document.querySelector('.search').addEventListener('input', function(e) {
     updateTransactionUI();
 });
 
-document.querySelector('.button2').addEventListener('click', function() {
-    sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+// sắp xếp theo danh mục
+document.getElementById('sortOrderSelect').addEventListener('change', function(e) {
+    sortOrder = e.target.value;
     updateTransactionUI();
 });
+
 
 function prevPage() {
     if (currentPage > 1) {
@@ -399,4 +415,18 @@ function deleteExpense(expenseId) {
     currentPage = 1;
     saveData();
     updateUI();
+}
+
+function renderCategoryOptions() {
+    const select = document.getElementById('selectedCategory');
+    select.innerHTML = '<option value="">-- Chọn danh mục --</option>';
+
+    if (!selectedMonth || selectedMonth.trim() === '') return;
+
+    categories.forEach(category => {
+        const option = document.createElement('option');
+        option.value = category.id;
+        option.textContent = `${category.name} (${category.limit.toLocaleString()} VND)`;
+        select.appendChild(option);
+    });
 }
