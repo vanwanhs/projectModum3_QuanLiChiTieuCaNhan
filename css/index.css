@@ -509,26 +509,19 @@ color: #fff;
     background-color: #dcd7d7;
 }
 @media screen and (max-width: 768px) {
-    .header {
-        display: flex;
+    .header .account {
+        flex-direction: row;
         justify-content: space-between;
-        padding: 10px; /* Adjust padding for smaller screens */
+        align-items: center;
+        padding: 15px 20px;
     }
 
-    .container {
-        max-width: 100%;
-        margin: 10px;
+    .account-controls {
+        margin-top: 0;
+        width: auto;
     }
 
-    .container .transaction-form input, 
-    .container .manager input {
-        width: 100%; /* Make inputs full-width on small screens */
-        margin-bottom: 10px;
-    }
-
-    .transaction-history .main {
-        flex-direction: column; /* Stack items vertically */
-        gap: 10px;
+    .account-controls select {
+        width: auto;
     }
 }
-

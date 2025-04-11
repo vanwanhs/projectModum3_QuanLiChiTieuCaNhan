@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -126,7 +126,7 @@
 <body>
     <h1>Quản Lý Tài Chính Cá Nhân</h1>
     
-    <!-- Phần quản lý danh mục -->
+
     <h2>Quản lý danh mục (theo tháng)</h2>
     <table class="category-table">
         <thead>
@@ -145,11 +145,11 @@
                     <button>Xóa</button>
                 </td>
             </tr>
-            <!-- Thêm các hàng khác tương tự -->
+            Thêm các hàng khác tương tự
         </tbody>
     </table>
 
-    <!-- Form thêm giao dịch -->
+    Form thêm giao dịch 
     <div class="transaction-form">
         <input type="number" placeholder="Số tiền">
         <select>
@@ -160,21 +160,21 @@
         <button>Thêm</button>
     </div>
 
-    <!-- Lịch sử giao dịch -->
+     Lịch sử giao dịch 
     <h2>Lịch sử giao dịch</h2>
     <div class="transaction-history">
         <div class="transaction-item">
             <span>Điện phòng: Đóng tiền phòng tháng 3 - 2,000,000 VND</span>
         </div>
-        <!-- Thêm các mục khác -->
+        Thêm các mục khác 
     </div>
 
-    <!-- Cảnh báo vượt hạn mức -->
+    Cảnh báo vượt hạn mức
     <div class="budget-alert">
         Danh mục "tiền ăn" đã vượt giới hạn: 1,000,000 / 1,000,000 VND
     </div>
 
-    <!-- Bảng thống kê -->
+     Bảng thống kê
     <table class="stats-table">
         <thead>
             <tr>
@@ -191,8 +191,81 @@
                 <td>5,000,000</td>
                 <td>✔ Đạt</td>
             </tr>
-            <!-- Thêm hàng khác -->
+            Thêm hàng khác 
         </tbody>
     </table>
+    
+</body>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>Month</th>
+                <th>Monthly expenditure</th>
+                <th>Budget</th>
+                <th onclick="sortStatus()">Status ⬍</th>
+            </tr>
+        </thead>
+        <tbody id="budgetTableBody">
+            <!-- Dữ liệu sẽ được render ở đây -->
+        </tbody>
+    </table>
+    
+    <script>
+        const budgetData = [
+            { month: "January", expenditure: 500, budget: 600 },
+            { month: "February", expenditure: 700, budget: 650 },
+            { month: "March", expenditure: 400, budget: 450 },
+            { month: "April", expenditure: 800, budget: 750 }
+        ];
+    
+        let sortAsc = true;
+    
+        function getStatus(expenditure, budget) {
+            return expenditure <= budget ? "Within Budget" : "Over Budget";
+        }
+    
+        function renderTable(data) {
+            const tbody = document.getElementById("budgetTableBody");
+            tbody.innerHTML = ""; // clear
+            data.forEach(item => {
+                const row = document.createElement("tr");
+                const status = getStatus(item.expenditure, item.budget);
+                row.innerHTML = `
+                    <td>${item.month}</td>
+                    <td>${item.expenditure}</td>
+                    <td>${item.budget}</td>
+                    <td>${status}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+    
+        function sortStatus() {
+            budgetData.sort((a, b) => {
+                const statusA = getStatus(a.expenditure, a.budget);
+                const statusB = getStatus(b.expenditure, b.budget);
+                if (sortAsc) {
+                    return statusA.localeCompare(statusB);
+                } else {
+                    return statusB.localeCompare(statusA);
+                }
+            });
+            sortAsc = !sortAsc;
+            renderTable(budgetData);
+        }
+    
+        // Initial render
+        renderTable(budgetData);
+    </script>
+    
 </body>
 </html>

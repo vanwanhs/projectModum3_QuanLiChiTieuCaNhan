@@ -30,6 +30,7 @@ let currentPage = 1;
 const itemsPerPage = 5;
 let searchQuery = '';
 let sortOrder = 'asc';
+let statusSortAsc = true; // biến cờ để đảo chiều mỗi lần sắp xếp (của chức năng làm thêm sắp xếp theo trạng thái)
 
 document.addEventListener('DOMContentLoaded', () => {
     renderCategories();
@@ -108,6 +109,9 @@ function renderCategories() {
 function renderCategoryOptions() {
     const select = document.getElementById('selectedCategory');
     select.innerHTML = '<option value="">-- Chọn danh mục --</option>';
+
+    if (!selectedMonth || selectedMonth.trim() === '') return;
+
     categories.forEach(category => {
         const option = document.createElement('option');
         option.value = category.id;
@@ -180,11 +184,10 @@ document.getElementById('btnSaveEdit').addEventListener('click', () => {
         errorElement.textContent = "Vui lòng nhập dữ liệu chính xác";
         return;
     }
-    if (!name || !limit) {
-        errorElement.textContent = "Vui lòng nhập đầy đủ thông tin";
+    if (!name || isNaN(limit) || limit <= 0) {
+        errorElement.textContent = "Vui lòng nhập đầy đủ thông tin hợp lệ";
         return;
-    }
-
+    }   
     const existingCategory = categories.find(c =>
         c.name.toLowerCase() === name.toLowerCase() && c.id !== id
     );
@@ -290,13 +293,36 @@ function updateUI() {
     const statsTable = document.querySelector('.monthly-stats tbody');
     statsTable.innerHTML = monthlyData.map(data => `
         <tr>
-            <td>${data.month}</td>
+            <td onclick ="tableExpenses()" style="backGround-Color: red">${data.month}</td>
             <td>${data.expenses.reduce((sum, e) => sum + e.amount, 0).toLocaleString()} VND</td>
             <td>${data.budget.toLocaleString()} VND</td>
             <td>${data.remaining >= 0 ? '✅ Đạt' : '❌ Vượt'}</td>
         </tr>
     `).join('');
 }
+function sortStatus(){
+    const statsTable = document.querySelector('.monthly-stats tbody');
+    const rows = Array.from(statsTable.querySelectorAll('tr'));
+
+    rows.sort((a, b) => {
+        const statusA = a.cells[3].textContent.trim();
+        const statusB = b.cells[3].textContent.trim();
+
+        if (statusA === statusB) return 0;
+        if (statusSortAsc){
+            return statusA > statusB ? 1 : -1;
+        } 
+        // else {
+        //     return statusB > statusA ? 1 : -1;
+        // }
+    });
+
+    statsTable.innerHTML = '';
+    rows.forEach(row => statsTable.appendChild(row));
+
+    // statusSortAsc = !statusSortAsc;
+}
+
 
 function updateTransactionUI() {
     const currentMonth = monthlyData.find(m => m.month === selectedMonth);
@@ -371,6 +397,10 @@ document.getElementById('sortOrderSelect').addEventListener('change', function(e
     updateTransactionUI();
 });
 
+// sắp xếp theo trang thái
+document.getElementById('sortStatus').addEventListener('change', function(e) {
+    sortStatus();
+});
 
 function prevPage() {
     if (currentPage > 1) {
@@ -415,18 +445,4 @@ function deleteExpense(expenseId) {
     currentPage = 1;
     saveData();
     updateUI();
-}
-
-function renderCategoryOptions() {
-    const select = document.getElementById('selectedCategory');
-    select.innerHTML = '<option value="">-- Chọn danh mục --</option>';
-
-    if (!selectedMonth || selectedMonth.trim() === '') return;
-
-    categories.forEach(category => {
-        const option = document.createElement('option');
-        option.value = category.id;
-        option.textContent = `${category.name} (${category.limit.toLocaleString()} VND)`;
-        select.appendChild(option);
-    });
 }
