@@ -396,6 +396,7 @@ color: #fff;
 /* Bổ sung thêm một số cái linh tinh */
 
 /* Table của bảng thống kê lịch sử*/
+/* Table of monthly statistics */
 .monthly-stats table {
     font-family: Arial, sans-serif;
     border-collapse: collapse;
@@ -483,16 +484,23 @@ color: #fff;
     background-color: #e74c3c;
     color: white;
 }   
- 
-.monthly-stats thead{
-    background-color: white;
-}
+
+/* .container .monthly-stats table{
+    margin-top: 84px;
+    background-color: #f8f9fa;
+    max-width: 768px;
+    height: 124px;
+    margin: auto;
+    background: #4338CA;
+    color: #FFFFFF;
+    border-radius: 12px;
+    padding: 25px;
+} */
 .monthly-stats select{
         padding: 6px 8px;
         border: none;
         color: rgb(6, 6, 6);
         font-size: 15px;
-        background-color: white;
 }
 .footer{
     background-color: #4338CA;

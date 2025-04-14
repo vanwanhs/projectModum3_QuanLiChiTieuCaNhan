@@ -10,17 +10,37 @@ if (currentUser) {
     window.location.href = 'login.html';
 }
 
-accountSelect.addEventListener('change', function() {
-    if (this.value === 'logout') {
-        const confirmLogout = confirm("Bạn có chắc chắn muốn đăng xuất không?");
-        if (confirmLogout) {
-            localStorage.removeItem('currentUser');
-            window.location.href = 'login.html';
-        } else {
-            this.value = '';
-        }
+document.getElementById("account").addEventListener("change", function (e) {
+    if (e.target.value === "logout") {
+        logoutAccount();
     }
 });
+
+function logoutAccount() {
+    Swal.fire({
+        title: "Are you sure you want to log out?",
+        text: "This action will take you back to the login page.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Log out",
+        cancelButtonText: "Cancel",
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            localStorage.removeItem("currentUser");
+            Swal.fire({
+                icon: "success",
+                title: "Logged out successfully",
+                showConfirmButton: false,
+                timer: 1500
+            }).then(() => {
+                window.location.href = "login.html";
+            });
+        }
+    });
+}
+
 
 /* ==========  KHỞI TẠO VÀ QUẢN LÝ DỮ LIỆU ========== */
 let monthlyData = JSON.parse(localStorage.getItem('monthlyData')) || [];
@@ -58,6 +78,13 @@ document.querySelector('.date-input').addEventListener('change', function(e) {
         monthlyData.push(existingData);
         saveData();
     }
+    const budgetInput = document.getElementById("budgetInput");
+    const textErrorDate =
+    if (existingData.budget > 0) {
+        budgetInput.value = existingData.budget.toLocaleString();  // Hiển thị ngân sách nếu có
+    } else {
+        budgetInput.value = '';  // Nếu không có ngân sách, để trống
+    }
 
     updateUI();
 });
@@ -89,6 +116,7 @@ btnSaveBudget.addEventListener("click", function() {
         updateUI();
     }
 });
+
 
 /* ========== DANH MỤC ========== */
 function renderCategories() {
@@ -170,7 +198,6 @@ function deleteCategory(id) {
     renderCategoryOptions();
 }
 
-
 // Sửa dữ liệu thư mục trong bài
 document.getElementById('btnSaveEdit').addEventListener('click', () => {
     const id = parseInt(document.getElementById('editCategoryId').value);
@@ -197,7 +224,10 @@ document.getElementById('btnSaveEdit').addEventListener('click', () => {
     }
 
     const index = categories.findIndex(c => c.id === id);
-    categories[index] = { ...categories[index], name, limit };
+    const categoryToUpdate = categories[index];
+    categoryToUpdate.name = name;
+    categoryToUpdate.limit = limit;
+    categories[index] = categoryToUpdate;
     saveData();
     renderCategories();
     renderCategoryOptions();
@@ -293,35 +323,35 @@ function updateUI() {
     const statsTable = document.querySelector('.monthly-stats tbody');
     statsTable.innerHTML = monthlyData.map(data => `
         <tr>
-            <td onclick ="tableExpenses()" style="backGround-Color: red">${data.month}</td>
+            <td>${data.month}</td>
             <td>${data.expenses.reduce((sum, e) => sum + e.amount, 0).toLocaleString()} VND</td>
             <td>${data.budget.toLocaleString()} VND</td>
             <td>${data.remaining >= 0 ? '✅ Đạt' : '❌ Vượt'}</td>
         </tr>
     `).join('');
 }
-function sortStatus(){
-    const statsTable = document.querySelector('.monthly-stats tbody');
-    const rows = Array.from(statsTable.querySelectorAll('tr'));
 
-    rows.sort((a, b) => {
-        const statusA = a.cells[3].textContent.trim();
-        const statusB = b.cells[3].textContent.trim();
+// sắp xếp theo trạng thái hoạt động
+const statusFilter = document.getElementById('statusFilter');
 
-        if (statusA === statusB) return 0;
-        if (statusSortAsc){
-            return statusA > statusB ? 1 : -1;
-        } 
-        // else {
-        //     return statusB > statusA ? 1 : -1;
-        // }
-    });
+statusFilter.addEventListener('click', function (e) {
+    if (statusFilter.value === 'sortStatus') {
+        const statsTable = document.querySelector('.monthly-stats tbody');
+        const rows = Array.from(statsTable.querySelectorAll('tr'));
 
-    statsTable.innerHTML = '';
-    rows.forEach(row => statsTable.appendChild(row));
+        rows.sort((a, b) => {
+            const statusA = a.cells[3].textContent.trim();
+            const statusB = b.cells[3].textContent.trim();
 
-    // statusSortAsc = !statusSortAsc;
-}
+            if (statusA === statusB) return 0;
+            return statusSortAsc ? (statusA === '✅ Đạt' ? -1 : 1) : (statusA === '✅ Đạt' ? 1 : -1);
+        });
+        statsTable.innerHTML = '';
+        rows.forEach(row => statsTable.appendChild(row));
+
+        statusSortAsc = !statusSortAsc;
+    }
+});
 
 
 function updateTransactionUI() {
@@ -373,10 +403,27 @@ function updateTransactionUI() {
     }
 
     document.querySelector('.transaction-item table').innerHTML = tableHTML;
-
+    // phần trang
     const totalPages = Math.ceil(expenses.length / itemsPerPage);
-    document.getElementById('pageNumbers').textContent = 
-        `Trang ${currentPage} / ${totalPages}`;
+    const pageNumbersContainer = document.getElementById('pageNumbers');
+    pageNumbersContainer.innerHTML = '';
+    // phần trang ở đoạn bên dưới các ô khi bấm vào ô nào nó sẽ nhảy tới ô đó
+    for (let i = 1; i <= totalPages; i++) {
+    const pageButton = document.createElement('button');
+    pageButton.textContent = i;
+    pageButton.style.margin = '0 4px';
+    pageButton.style.padding = '6px 10px';
+    pageButton.style.borderRadius = '6px';
+    pageButton.style.border = '1px solid #ccc';
+    pageButton.style.backgroundColor = i === currentPage ? '#3B82F6' : '#fff';
+    pageButton.style.color = i === currentPage ? '#fff' : '#000';
+    pageButton.onclick = () => {
+        currentPage = i;
+        updateTransactionUI();
+    };
+    pageNumbersContainer.appendChild(pageButton);
+    }
+
 }
 
 /* ========== TIỆN ÍCH ========== */
@@ -398,9 +445,9 @@ document.getElementById('sortOrderSelect').addEventListener('change', function(e
 });
 
 // sắp xếp theo trang thái
-document.getElementById('sortStatus').addEventListener('change', function(e) {
-    sortStatus();
-});
+// document.getElementById('sortStatus').addEventListener('click', function(e) {
+//     sortStatus();
+// });
 
 function prevPage() {
     if (currentPage > 1) {

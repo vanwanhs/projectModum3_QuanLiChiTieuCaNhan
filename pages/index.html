@@ -15,7 +15,7 @@
             <div class="account-controls">
                 <select id="account" style="background-color: #4338CA">
                     <option value="user">👤 Account: <span id="currentUser"></span></option>
-                    <option value="logout">🚪 logout</option>
+                    <option value="logout" onclick="logoutAccount()">🚪 logout</option>
                 </select>
             </div>
         </div>
@@ -141,10 +141,16 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>Month</th>
-                                <th> Monthly expenditure</th>
-                                <th>Budget</th>
-                                <th onclick="sortStatus()">Status</th>
+                                <td>Month</td>
+                                <td> Monthly expenditure</td>
+                                <td>Budget</td>
+                                <td>
+                                    <select id="statusFilter" value="sortStatus" style="font-family: 'Times New Roman', Times, serif; background-color: white;font-size: 18px;">
+                                        <option value="">Status</option>
+                                        <option  id="sortStatus" value="sortStatus">Sort Status</option>
+                                    </select>
+                                </td>
+                                <!-- onclick="sortStatus()" -->
                             </tr>
                         </thead>
                         <tbody>
@@ -159,6 +165,7 @@
             </div>
     </div>
     <script src="../js/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 </html>
