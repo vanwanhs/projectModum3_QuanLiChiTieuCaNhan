@@ -531,3 +531,9 @@ select {
         width: auto;
     }
 }
+
+.mini-swal {
+    width: 250px !important;
+    height: auto !important;
+    font-size: 13px !important;
+}

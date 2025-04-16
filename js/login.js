@@ -24,6 +24,7 @@ formLogin.addEventListener("submit", function(e) {
     if (!emailUser) {
         emailError.textContent = "Vui lòng nhập email";
         emailError.style.display = "block";
+        emailInput.style.border = "1px solid red"
         isValid = false;
     }
 
@@ -31,6 +32,7 @@ formLogin.addEventListener("submit", function(e) {
     if (!passwordUser) {
         passwordError.textContent = "Vui lòng nhập mật khẩu";
         passwordError.style.display = "block";
+        passwordInput.style.border = "1px solid red"
         isValid = false;
     }
 
@@ -48,12 +50,27 @@ formLogin.addEventListener("submit", function(e) {
     if (foundUser) {
         // Lưu thông tin user đang đăng nhập
         localStorage.setItem("currentUser", JSON.stringify(foundUser));
-        // Chuyển hướng đến trang chủ
-        window.location.href = "index.html";
+    
+        // Hiển thị thông báo đăng nhập thành công
+        Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Login success!",
+            showConfirmButton: false,
+            timer: 500
+        });
+    
+        // Chuyển hướng sau khi hiện thông báo (delay 1.5s)
+        setTimeout(() => {
+            window.location.href = "index.html";
+        }, 1000);
     } else {
         passwordError.textContent = "Email hoặc mật khẩu không chính xác";
         passwordError.style.display = "block";
+        
     }
+    
+
 });
 
 // Xử lý sự kiện input để ẩn thông báo lỗi

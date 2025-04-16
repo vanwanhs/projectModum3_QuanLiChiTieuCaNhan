@@ -47,9 +47,9 @@ let monthlyData = JSON.parse(localStorage.getItem('monthlyData')) || [];
 let categories = JSON.parse(localStorage.getItem('categories')) || [];
 let selectedMonth = '';
 let currentPage = 1;
-const itemsPerPage = 5;
-let searchQuery = '';
-let sortOrder = 'asc';
+const itemsPerPage = 2;
+let searchQuery = ''; //tìm giao dịch muốn tìm kiếm 
+let sortOrder = 'asc'; // sắp xếp theo kiểu tăng dần
 let statusSortAsc = true; // biến cờ để đảo chiều mỗi lần sắp xếp (của chức năng làm thêm sắp xếp theo trạng thái)
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -57,6 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderCategoryOptions();
     updateUI();
 });
+
 
 /* ========== XỬ LÝ NGÂN SÁCH ========== */
 const budgetInput = document.getElementById("budgetInput");
@@ -79,13 +80,11 @@ document.querySelector('.date-input').addEventListener('change', function(e) {
         saveData();
     }
     const budgetInput = document.getElementById("budgetInput");
-    const textErrorDate =
     if (existingData.budget > 0) {
         budgetInput.value = existingData.budget.toLocaleString();  // Hiển thị ngân sách nếu có
     } else {
         budgetInput.value = '';  // Nếu không có ngân sách, để trống
     }
-
     updateUI();
 });
 
@@ -119,6 +118,7 @@ btnSaveBudget.addEventListener("click", function() {
 
 
 /* ========== DANH MỤC ========== */
+// Hàm thực hiện chức năng hiện thị danh mục chỉ tiêu vào trong bảng
 function renderCategories() {
     const tbody = document.getElementById("categoryBody");
     tbody.innerHTML = categories.map(category => `
@@ -137,8 +137,9 @@ function renderCategories() {
 function renderCategoryOptions() {
     const select = document.getElementById('selectedCategory');
     select.innerHTML = '<option value="">-- Chọn danh mục --</option>';
+    // if (!selectedMonth || selectedMonth.trim() === '') return;
+    if (!selectedMonth?.trim()) return;
 
-    if (!selectedMonth || selectedMonth.trim() === '') return;
 
     categories.forEach(category => {
         const option = document.createElement('option');
@@ -170,6 +171,14 @@ document.getElementById('btnAddCategory').addEventListener('click', () => {
         errorElement.style.display = 'block';
         return;
     }
+    if( limit<0){
+        errorElement.textContent = "Vui lòng nhập đầy đủ thông tin";
+        errorElement.style.display = 'block';
+        return;
+    } else {
+        errorElement.textContent = "";
+        errorElement.style.display = 'block';
+    }
 
     categories.push({ id: Date.now(), name, limit });
     saveData();
@@ -179,24 +188,59 @@ document.getElementById('btnAddCategory').addEventListener('click', () => {
     document.getElementById('categoryLimit').value = '';
 });
 
+
 /// Mở form chỉnh sửa cùa thư mục
 function openEdit(id) {
+// tìm danh mục theo id trong mảng categories
     const category = categories.find(c => c.id === id);
     document.getElementById('editCategoryId').value = id;
     document.getElementById('editCategoryName').value = category.name;
     document.getElementById('editCategoryLimit').value = category.limit;
+// Hiện thị form chỉnh sửa thông qua css display
     document.getElementById('editForm').style.display = 'block';
 }
-
+// xóa danh mục có trong bài
 function deleteCategory(id) {
     const category = categories.find(c => c.id === id);
-    const confirmDelete = confirm(`Bạn có chắc muốn xóa danh mục "${category.name}" không?`);
-    if (!confirmDelete) return;
-    categories = categories.filter(c => c.id !== id);
-    saveData();
-    renderCategories();
-    renderCategoryOptions();
+
+    Swal.fire({
+        title: `Are you sure you want to delete category "${category.name}"?`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Delete",
+        cancelButtonText: "Cancel",
+        customClass: {
+            popup: "small-swal"
+        },
+        showClass: {
+            popup: "animate__animated animate__fadeInUp animate__faster"
+        },
+        hideClass: {
+            popup: "animate__animated animate__fadeOutDown animate__faster"
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            categories = categories.filter(c => c.id !== id);
+            saveData();
+            renderCategories();
+            renderCategoryOptions();
+
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "Category deleted successfully",
+                showConfirmButton: false,
+                timer: 1200,
+                customClass: {
+                    popup: "mini-swal"
+                }
+            });
+        }
+    });
 }
+
 
 // Sửa dữ liệu thư mục trong bài
 document.getElementById('btnSaveEdit').addEventListener('click', () => {
@@ -233,7 +277,7 @@ document.getElementById('btnSaveEdit').addEventListener('click', () => {
     renderCategoryOptions();
     cancelEdit();
 });
-// Chức năng đóng danh mục trong bài
+// Chức năng đóng thẻ sau khi chỉnh sửa
 function cancelEdit() {
     document.getElementById('editForm').style.display = 'none';
     document.getElementById('editCategoryError').textContent = '';
@@ -331,29 +375,28 @@ function updateUI() {
     `).join('');
 }
 
-// sắp xếp theo trạng thái hoạt động
-const statusFilter = document.getElementById('statusFilter');
+// sắp xếp theo trạng thái hoạt động statusSortAsc
+    const statusFilter = document.getElementById('statusFilter');
+    statusFilter.addEventListener('click', function (e) {
+        if (statusFilter.value === 'sortStatus') {
+            const statsTable = document.querySelector('.monthly-stats tbody');
+            const rows = Array.from(statsTable.querySelectorAll('tr'));
 
-statusFilter.addEventListener('click', function (e) {
-    if (statusFilter.value === 'sortStatus') {
-        const statsTable = document.querySelector('.monthly-stats tbody');
-        const rows = Array.from(statsTable.querySelectorAll('tr'));
+            rows.sort((a, b) => {
+                const statusA = a.cells[3].textContent.trim();
+                const statusB = b.cells[3].textContent.trim();
 
-        rows.sort((a, b) => {
-            const statusA = a.cells[3].textContent.trim();
-            const statusB = b.cells[3].textContent.trim();
-
-            if (statusA === statusB) return 0;
-            return statusSortAsc ? (statusA === '✅ Đạt' ? -1 : 1) : (statusA === '✅ Đạt' ? 1 : -1);
-        });
-        statsTable.innerHTML = '';
-        rows.forEach(row => statsTable.appendChild(row));
-
-        statusSortAsc = !statusSortAsc;
-    }
-});
+                if (statusA === statusB) return 0;
+                return statusA === '✅ Đạt' ? -1 : 1
+            });
+            statsTable.innerHTML = '';
+            rows.forEach(row => statsTable.appendChild(row));
+        }
+    });
 
 
+    
+// Cập nhật lại giao diện và chức năng tìm kiếm sắp xếp theo giá cả
 function updateTransactionUI() {
     const currentMonth = monthlyData.find(m => m.month === selectedMonth);
     if (!currentMonth) return;
@@ -371,6 +414,7 @@ function updateTransactionUI() {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     const pagedExpenses = expenses.slice(startIndex, endIndex);
+
 
     let tableHTML = `
         <tr>
@@ -444,10 +488,6 @@ document.getElementById('sortOrderSelect').addEventListener('change', function(e
     updateTransactionUI();
 });
 
-// sắp xếp theo trang thái
-// document.getElementById('sortStatus').addEventListener('click', function(e) {
-//     sortStatus();
-// });
 
 function prevPage() {
     if (currentPage > 1) {
@@ -478,18 +518,51 @@ document.getElementById('expenseNote').addEventListener('keypress', function(e) 
 });
 
 function deleteExpense(expenseId) {
-    const confirmDelete = confirm("Bạn có chắc chắn muốn xóa giao dịch này?");
-    if (!confirmDelete) return;
-
     const monthData = monthlyData.find(m => m.month === selectedMonth);
     if (!monthData) return;
 
     const expenseIndex = monthData.expenses.findIndex(e => e.id === expenseId);
     if (expenseIndex === -1) return;
 
-    monthData.remaining += monthData.expenses[expenseIndex].amount;
-    monthData.expenses.splice(expenseIndex, 1);
-    currentPage = 1;
-    saveData();
-    updateUI();
+    const expense = monthData.expenses[expenseIndex];
+    const category = categories.find(c => c.id === expense.categoryId);
+
+    Swal.fire({
+        title: "Are you sure you want to delete this transaction?",
+        text: `Category: ${category ? category.name : 'Unknown'} | Amount: ${expense.amount.toLocaleString()} VND`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Delete",
+        cancelButtonText: "Cancel",
+        customClass: {
+            popup: "small-swal"
+        },
+        showClass: {
+            popup: "animate__animated animate__fadeInUp animate__faster"
+        },
+        hideClass: {
+            popup: "animate__animated animate__fadeOutDown animate__faster"
+        }
+    }).then((result) => {
+        if (!result.isConfirmed) return;
+
+        monthData.remaining += expense.amount;
+        monthData.expenses.splice(expenseIndex, 1);
+        currentPage = 1;
+        saveData();
+        updateUI();
+
+        Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Transaction deleted successfully",
+            showConfirmButton: false,
+            timer: 1200,
+            customClass: {
+                popup: "mini-swal"
+            }
+        });
+    });
 }
